@@ -1,13 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Home from './components/Home';
+import Contacts from './components/Contacts';
+import UpdateContact from './components/UpdateContact';
+import Main from './components/Main';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Main></Main>,
+    children: [
+      {
+        path: '/',
+        element: <Home></Home>,
+      },
+      {
+        path: '/contacts',
+        element: <Contacts></Contacts>,
+        loader: () => fetch('http://localhost:5000/contacts')
+      },
+      {
+        path: '/updatecontact/:id',
+        element: <UpdateContact></UpdateContact>,
+        loader: ({params}) => fetch(`http://localhost:5000/contacts/${params.id}`)
+      },
+    ]
+  },
+
+])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router}>
+
+    </RouterProvider>
   </React.StrictMode>
 );
 
