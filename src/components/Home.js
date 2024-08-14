@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { authContext } from '../context/AuthContext';
 
 const Home = () => {
+    const { user } = useContext(authContext);
     const handelAddContact = event => {
         event.preventDefault();
         const form = event.target;
@@ -11,7 +13,8 @@ const Home = () => {
         const contact = {
             name,
             email,
-            mobile
+            mobile,
+            userEmail: user.email
         };
 
         fetch('http://localhost:5000/contacts', {
@@ -28,7 +31,7 @@ const Home = () => {
                     alert('Contact Added Successfully');
                     form.reset();
                 }
-                else{
+                else {
                     alert('Something went wrong!!!');
                 }
             });
@@ -39,7 +42,7 @@ const Home = () => {
                 <div className="card shrink-0 w-full max-w-xl shadow-2xl bg-base-100">
 
                     <form onSubmit={handelAddContact} className="card-body">
-                        <h1 className="text-2xl font-bold">Welcome To Newman PhoneBook</h1>
+                        <h1 className="text-2xl">Welcome To <strong>{user?.displayName}</strong> PhoneBook </h1>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Name</span>

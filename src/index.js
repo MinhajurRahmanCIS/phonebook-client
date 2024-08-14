@@ -7,6 +7,11 @@ import Home from './components/Home';
 import Contacts from './components/Contacts';
 import UpdateContact from './components/UpdateContact';
 import Main from './components/Main';
+import AuthContext from './context/AuthContext';
+import Signup from './components/Signup';
+import Login from './components/Login';
+import Default from './components/Default';
+import PrivateRoute from './Routes/PrivateRoute/PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -15,18 +20,29 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home></Home>,
+        element: <Default></Default>
+      },
+      {
+        path: '/home',
+        element: <PrivateRoute><Home></Home></PrivateRoute>
       },
       {
         path: '/contacts',
-        element: <Contacts></Contacts>,
-        loader: () => fetch('http://localhost:5000/contacts')
+        element: <PrivateRoute><Contacts></Contacts></PrivateRoute>
       },
       {
         path: '/updatecontact/:id',
         element: <UpdateContact></UpdateContact>,
-        loader: ({params}) => fetch(`http://localhost:5000/contacts/${params.id}`)
+        loader: ({ params }) => fetch(`http://localhost:5000/contacts/${params.id}`)
       },
+      {
+        path: '/signup',
+        element: <Signup></Signup>
+      },
+      {
+        path: '/login',
+        element: <Login></Login>
+      }
     ]
   },
 
@@ -35,9 +51,11 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}>
+    <AuthContext>
+      <RouterProvider router={router}>
 
-    </RouterProvider>
+      </RouterProvider>
+    </AuthContext>
   </React.StrictMode>
 );
 

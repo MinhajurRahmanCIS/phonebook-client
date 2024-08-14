@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { authContext } from '../context/AuthContext';
 
 const Navbar = () => {
+    const { user, logout } = useContext(authContext);
+
+    const handelLogout = () => {
+        logout();
+    };
+
     const menu =
         <>
-            <li><Link to='/'>Home</Link></li>
+            <li><Link to='/home'>Home</Link></li>
             <li><Link to='/contacts'>Contact</Link></li>
         </>;
     return (
@@ -26,7 +33,14 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <button className="btn">Button</button>
+                {
+                    user?.email ? <button onClick={handelLogout} className="btn">Logout</button> :
+                            <div className='flex gap-2'>
+                                <Link to='/login' className="btn">Login</Link>
+                                <Link to='/signup' className="btn">Signup</Link>
+                            </div>
+
+                }
             </div>
         </div>
     );
